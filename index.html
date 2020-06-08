@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<htlm lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link href="https://fonts.googleapis.com/css?family=Alegreya+SC:400,700,800&display=swap" rel="stylesheet">
+
+
+        <title>Refresh JS game</title>
+    </head>
+
+    <body>
+        <div class="mh-100vh background">
+            <nav class="navbar navbar-light">
+
+                <a class="navbar-brand p-0 mr-auto" href="index.html">
+                    <div class="row mx-0">
+                        <img src="assets/war-hammer.svg" width="30" height="30" alt="">
+                        <h2 class="d-inline-block mb-0 ml-2 text-white font-weight-800">Vikings:</h2>
+
+                        <h2 class="d-inline-block mb-0 ml-2 text-white">A Turn-Based JS Board Game</h2>
+
+                    </div>
+                </a>
+                <button id="navBtnRules" type="button" class="btn btn-outline-light font-weight-bold w-135 active"
+                    onclick="game.hideRules()"><img src="assets/flag.svg" width="18" height="18" class="mr-1">Hide
+                    Rules</button>
+                <button id="navBtnCustomize" type="button" class="btn btn-outline-light font-weight-bold ml-3 w-135"
+                    onclick="game.showCustomize()"><img src="assets/amulet.svg" width="18" height="18" class="mr-1">
+                    Custom Game</button>
+                <button type="button" class="btn btn-outline-light font-weight-bold ml-3"
+                    onclick="game.newCustomGame()">
+                    <img src="assets/arrow.png" width="18" height="18" class="mr-1">Start New Game</button>
+
+            </nav>
+
+            <div class="px-3 sticky-top pb-3">
+
+                <div id="gameRules" class="jumbotron bg-white-opacity py-4 mb-3">
+                    <h1>The Rules</h1>
+
+                    <div class="row px-4 pt-4 mb-3 border-bottom">
+
+                        <div class="col p-2">
+                            <h2>Movement</h2>
+                            <ul>
+                                <li class="h5 text-left">Players take it in turns to move and can move from 1-3 squares
+                                    horizontally
+                                    or
+                                    vertically</li>
+                                <li class="h5 text-left">Players cannot move through obsticles tiles containing
+                                    obsticles
+                                    such as trees and mountains
+                                </li>
+                                <div class="row mb-3">
+                                    <div class="col icon tool-tip ">
+                                        <img src="assets/trees.svg" width="50" height="50"
+                                            class=" trees rounded border">
+                                        <span class="tool-tip-text">trees<br>You cannot pass!
+                                        </span>
+                                    </div>
+                                    <div class="col icon tool-tip ">
+                                        <img src="assets/mountains.svg" width="50" height="50"
+                                            class="mountains rounded border">
+                                        <span class="tool-tip-text">mountains<br>You cannot pass!
+                                        </span>
+                                    </div>
+                                </div>
+                                <li class="h5 text-left">A player can only hold one weapon in his inventory at a time.
+                                </li>
+                                <li class="h5 text-left">When
+                                    a player walks over a tile containing a new weapon, the player will add the new
+                                    weapon
+                                    to their inventory and drop their old weapon on that tile.</li>
+                                <li class="h5 text-left">When a player moves adjacent(vertically or horizontally) to
+                                    another
+                                    player, a fight between the two players will start!</li>
+                            </ul>
+                        </div>
+
+                        <div class="col p-2">
+                            <h2>Weapons</h2>
+                            <ul>
+                                <li class="h5 text-left">Each player starts with a knife. This is a basic weapon that
+                                    deals
+                                    10 damange and has an accuracy of 100%, so will always deal damage to the other
+                                    player.
+                                </li>
+                                <div class="icon tool-tip mb-3">
+                                    <img src="assets/knife.svg " width="50" height="50"
+                                        class="inventory rounded border">
+                                    <span class="tool-tip-text">knife<br>Damage: 10<br>Accuracy: 100%
+                                    </span>
+                                </div>
+                                <li class="h5 text-left">Other weapons have accuracy less than 100% and thus have a
+                                    chance
+                                    to miss their oponent, however these weapons deal a lot more damage.</li>
+                                <li class="h5 text-left">To look at the details of a weapon or item in the game, hover
+                                    your
+                                    curser over it to view the stats of it.
+                                </li>
+                                <li class="h5 text-left">Some examples of other weapons are shown below:</li>
+                                <div class="row mb-3">
+                                    <div class=" col icon tool-tip ">
+                                        <img src="assets/hammer.svg" width="50" height="50"
+                                            class="inventory rounded border">
+                                        <span class="tool-tip-text">hammer<br>Damage: 50<br>Accuracy: 30%
+                                        </span>
+                                    </div>
+                                    <div class="col icon tool-tip ">
+                                        <img src="assets/war-hammer.svg" width="50" height="50"
+                                            class="inventory rounded border">
+                                        <span class="tool-tip-text">war-hammer<br>Damage: 45<br>Accuracy: 65%
+                                        </span>
+                                    </div>
+                                    <div class="col icon tool-tip ">
+                                        <img src="assets/axe.svg" width="50" height="50"
+                                            class="inventory rounded border">
+                                        <span class="tool-tip-text">axe<br>Damage: 40<br>Accuracy: 77%
+                                        </span>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+
+                        <div class="col p-2">
+                            <h2>The Battle</h2>
+                            <ul>
+                                <li class="h5 text-left">Each player takes it in turns to fight, with the option to
+                                    attack
+                                    or defend.</li>
+                                <li class="h5 text-left">Defending increases a players defence by 50, which reduces the
+                                    damage received by 50% that turn.</li>
+                                <li class="h5 text-left mb-0">A players defence reduces by 10 each turn. After
+                                    defending,
+                                    the
+                                    player would have the following defence for the next 5 turns: 50, 40, 30, 20, 10.
+                                </li>
+                                Defence
+                                <div class="progress progress-blue mb-3">
+                                    <div class="progress-bar bg-info" id="rulesPlayer1Defence" role="progressbar"
+                                        style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50
+                                    </div>
+                                </div>
+                                <li class="h5 text-left">If a player attacks, depending on the player's weapon accuracy
+                                    if
+                                    their attack is successful, they will deal damage to their opponent.</li>
+                                <li class="h5 text-left mb-0">The first player to reduce their opponents health to 0 is
+                                    the
+                                    winner.</li>
+                                Health
+                                <div class="progress bg-danger mb-0">
+                                    <div class="progress-bar bg-success" id="ruelsPlayer1Health" role="progressbar"
+                                        style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                        10
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                    <button id="btnRules" type="button" class="btn btn-custom font-weight-bold w-125"
+                        onclick="game.hideRules()"><img src="assets/flag.svg" width="18" height="18" class="mr-1">Hide
+                        Rules</button>
+                </div>
+
+                <div id="gameCustomize" class="jumbotron bg-white-opacity py-4 mb-3" style="display: none;">
+                    <h1>Customize your Game</h1>
+                    <div class="row px-4 pt-4 mb-3 border-bottom">
+
+                        <div class="col p-2">
+                            <h2>Player Names</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Player 1 Name</label>
+                                    <input type="name" class="form-control" id="player1Username"
+                                        placeholder="Enter Name" value="Ragnar">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Player 2 Name</label>
+                                    <input type="name" class="form-control" id="player2Username" placeholder="Ragnar"
+                                        value="Lagertha">
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <div class="col p-2">
+                            <h2>Map Size</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="inputMapRows">Map Rows</label>
+                                    <select id="userMapRow" class="form-control">
+                                        <option>8</option>
+                                        <option selected>10</option>
+                                        <option>12</option>
+                                        <option>14</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputMapCols">Map Columns</label>
+                                    <select id="userMapCol" class="form-control">
+                                        <option>16</option>
+                                        <option>18</option>
+                                        <option>20</option>
+                                        <option selected>22</option>
+                                        <option>24</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col p-2">
+                            <h2>Weapons & Obsticles</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="inputWeaponNo">Number of Weapons</label>
+                                    <select id="userWeaponNo" class="form-control" value="option1">
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option selected>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputObsticleNo">Number of Obsticles</label>
+                                    <select id="userObsticleNo" class="form-control">
+                                        <option>16</option>
+                                        <option>18</option>
+                                        <option selected>20</option>
+                                        <option>22</option>
+                                        <option>24</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button id="customizeBtnCustomize" type="button" class="btn btn-custom ml-3 font-weight-bold"
+                            onclick="game.newCustomGame()">
+                            <img src="assets/arrow.png" width="18" height="18" class="mr-1">Start Custom Game</button>
+
+                    </div>
+                </div>
+
+                <div id="gameMap" class="container-fluid border bg-white-opacity mb-3 rounded" style="display: none">
+                </div>
+
+                <div id="gameFight" class="container-fluid px-0 mb-3" style="display: none">
+                    <div class="jumbotron bg-white-opacity mb-3">
+                        <h1 id="gameFightJumbotron" class="display-4">3,2,1 Fight!</h1>
+                        <p id="gameFightJumbotronSubText" class="lead">You have encountered an enemy</p>
+                        <hr class="my-4">
+                        <div class="row">
+                            <div class="col">
+                                <div id="player1Turn" class="min-height-15" style="display: none">
+                                    <h2 id="player1TurnUsername" class="display-6 rounded-lg player1-color">Player1's
+                                        turn
+                                    </h2>
+                                    <p class="lead">Choose if you want to attack or defend!</p>
+                                    <button type="button" class="btn btn-lg btn-outline-danger mr-2"
+                                        onclick="game.attack()">Attack</button>
+                                    <button type="button" class="btn btn-lg btn-outline-info"
+                                        onclick="game.defend()">Defend</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div id="player2Turn" class="min-height-15" style="display: block">
+                                    <h2 id="player2TurnUsername" class="display-6 rounded-lg player2-color">Player2's
+                                        turn
+                                    </h2>
+                                    <p class="lead">Choose if you want to attack or defend!</p>
+                                    <button type="button" class="btn btn-lg btn-outline-danger mr-2"
+                                        onclick="game.attack()">Attack</button>
+                                    <button type="button" class="btn btn-lg btn-outline-info"
+                                        onclick="game.defend()">Defend</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="congratWinner" class="row" style="display: none;">
+                            <div class="col">
+                                <img src="assets/thor.svg" class="min-height-15">
+                            </div>
+                            <div id="winnerIcon" class="col">
+                                <img src="assets/player1.svg" class="min-height-15">
+                            </div>
+                            <div class="col">
+                                <img src="assets/viking-2.svg" class="min-height-15">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="gameInventory" class="container-fluid mb-3" style="display: none">
+                    <div class="row">
+                        <div class="border rounded col mr-2 bg-white-opacity">
+                            <div class="row border-bottom">
+                                <div class="col-3 my-auto border min-height-5 player1 icon">
+                                    <img src="assets/player1.svg" id="player1Icon" class="icon min-height-5">
+                                </div>
+                                <div class="col-9 my-auto">
+                                    Health
+                                    <div class="progress bg-danger">
+                                        <div class="progress-bar bg-success" id="player1Health" role="progressbar"
+                                            style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                            100
+                                        </div>
+                                    </div>
+                                    Defence
+                                    <div class="progress progress-blue">
+                                        <div class="progress-bar bg-info" id="player1Defence" role="progressbar"
+                                            style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <b id="player1InventoryTitle" class="player1Inventory">Inventory</b>
+                            <div id="player1Inventory" class="container mb-2" style="display: none;">
+                                <div class="row border">
+                                    <div id="player1Inventory1" class="col border min-height-5 px-0"></div>
+                                    <div id="player1Inventory2" class="col border min-height-5 px-0"></div>
+                                    <div id="player1Inventory3" class="col border min-height-5 px-0"></div>
+                                </div>
+                            </div>
+                            <div id="player1InventoryWin" class="container mb-2" style="display: none;">
+                                <div class="row border">
+                                    <div class="col border min-height-5 px-0">
+                                        <h1>Winner!</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border rounded col ml-2 bg-white-opacity">
+                            <div class="row border-bottom">
+                                <div class="col-3 my-auto border min-height-5 player2">
+                                    <img src="assets/player2.svg" id="player2Icon" style="display: none;"
+                                        class="icon min-height-5">
+                                </div>
+                                <div class="col-9 my-auto">
+                                    Health
+                                    <div class="progress bg-danger">
+                                        <div class="progress-bar bg-success" id="player2Health" role="progressbar"
+                                            style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                            100
+                                        </div>
+                                    </div>
+                                    Defence
+                                    <div class="progress progress-blue">
+                                        <div class="progress-bar bg-info" id="player2Defence" role="progressbar"
+                                            style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <b id="player2InventoryTitle">Inventory</b>
+                            <div id="player2Inventory" class="container mb-2">
+                                <div class="row border">
+                                    <div id="player2Inventory1" class="col border min-height-5 px-0"></div>
+                                    <div id="player2Inventory2" class="col border min-height-5 px-0"></div>
+                                    <div id="player2Inventory3" class="col border min-height-5 px-0"></div>
+                                </div>
+                            </div>
+                            <div id="player2InventoryWin" class="container mb-2" style="display: none;">
+                                <div class="row border">
+                                    <div class="col border min-height-5 px-0">
+                                        <h1>Winner!</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <script type="text/javascript" src="js/script.js"></script>
+        <script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+    </body>
+</htlm>
